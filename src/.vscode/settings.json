@@ -18,6 +18,7 @@
     ],
     "cSpell.words": [
         "gspread",
+        "OURA",
         "spotipy"
     ],
     "editor.defaultFormatter": "ms-python.autopep8", // 保存時に自動整形する
