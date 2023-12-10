@@ -13,11 +13,15 @@
 # Own packages
 #########################################################
 from common.log import initialize_logger
+from controllers import SleepController
 
 
 def main():
     """main"""
     initialize_logger()
+    sc = SleepController()
+
+    sc.add()
 
 
 if __name__ == "__main__":
