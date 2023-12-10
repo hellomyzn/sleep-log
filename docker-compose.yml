@@ -1,0 +1,15 @@
+version: '3.6'
+services:
+  python:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./infra/docker/python/Dockerfile
+    container_name: 'python'
+    hostname: 'python'
+    working_dir: '/opt/work/'
+    tty: true
+    volumes:
+      - ./src/:/opt/work
+    environment:
+      - TZ=Asia/Tokyo

@@ -1,0 +1,34 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/opt/poetry/venv/lib/python3.11/site-packages",
+        // python -c "import site; print (site.getsitepackages())" 
+        "/usr/local/lib/python3.11/site-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/opt/poetry/venv/lib/python3.11/site-packages",
+        "/usr/local/lib/python3.11/site-packages"
+    ],
+    "python.defaultInterpreterPath": "python",
+    "editor.minimap.enabled": false, // ミニマップを非表示にする
+    "breadcrumbs.enabled": true, // ファイルのパンくずリストを表示する
+    "files.insertFinalNewline": true, // ファイルの末尾を改行で終わらせる
+    "editor.renderLineHighlight": "all", // 選択行の行番号をハイライトする
+    "cSpell.ignoreWords": [
+        "hoge"
+    ],
+    "cSpell.words": [
+        "gspread",
+        "spotipy"
+    ],
+    "editor.defaultFormatter": "ms-python.autopep8", // 保存時に自動整形する
+    "autopep8.args": ["--max-line-length", "120"],
+    "editor.formatOnSave": true,
+    "pylint.args": [
+        "--max-line-length=120",
+        // W0703: Catching too general exception %s
+        // W0603: Using the global statement
+        // W0719: Raising too general exception
+        "--disable=W0703, W0603, W0719"
+    ],
+    "editor.tabFocusMode": false
+}

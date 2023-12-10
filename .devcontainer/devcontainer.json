@@ -1,0 +1,21 @@
+{
+    "name": "Python VScode",                    // VScodeがコンテナに接続したときのタイトルを自由に設定
+    "dockerComposeFile": "../docker-compose.yml",  // docker-conpose.ymlファイルを指定
+    "service": "python",                        // docker-conpose.ymlファイル内に記載したサービス名を指定
+    "workspaceFolder": "/opt/work",         // VScode接続時に開くフォルダを指定
+    "customizations": {
+        "vscode": {
+            "extensions": [                     // コンテナ作成時にインストールする拡張機能を記載　
+                "ms-python.python",
+                "ms-python.pylint",
+                "ms-python.autopep8",
+                "ms-python.vscode-pylance",
+                "njpwerner.autodocstring",
+                "usernamehw.errorlens",
+                "oderwat.indent-rainbow",
+                "streetsidesoftware.code-spell-checker",
+                "vscodevim.vim"
+            ]
+        }
+    }
+}
