@@ -50,15 +50,70 @@ class SleepService(object):
 
         return sleep_data
 
-    def add(self) -> None:
+    def new(self, data) -> list:
         """_summary_
+
+        Args:
+            data (_type_): _description_
+
+        Returns:
+            list: _description_
+        """
+        info(f"start to retrieve new data. data num: {len(data)}")
+        # get latest data from csv
+        all_data = self.repo.all()
+        if len(all_data) == 0:
+            warn(f"there is no data. repo: {self.repo.__class__}")
+            return data
+        latest_data = all_data[-1]
+        # TODO: remove
+        print(latest_data)
+
+        # get "day" as latest date
+        latest_datetime = fromisoformat_to_datetime(latest_data["bedtime_start"])
+
+        # remove date before the date
+        new_data = []
+        for d in data:
+            datetime = fromisoformat_to_datetime(d["bedtime_start"])
+            if latest_datetime < datetime:
+                new_data.append(d)
+        return new_data
+
+    def put_id(self, data: list) -> list:
+        """_summary_
+
+        Args:
+            data (list): _description_
+
+        Returns:
+            list: _description_
+        """
+        info(f"start to put id to each elements. data num: {len(data)}")
+        all_data = self.repo.all()
+        if len(all_data) == 0:
+            warn(f"there is no data. repo: {self.repo.__class__}")
+            _id = 1
+        else:
+            _id = int(all_data[-1]["id"]) + 1
+
+        for d in data:
+            d.update({"id": _id})
+            _id += 1
+
+        info(f"finish to put id to each elements. data: {data}")
+        return data
+
+    def add(self, data: list) -> None:
+        """_summary_
+
+        Args:
+            sleep_data (list): _description_
 
         Returns:
             _type_: _description_
         """
-        info("start service add")
-        data = self.get()
-        cs_repo = CsvSleepRepository()
-        cs_repo.add(data)
+        info(f"start service add. data num: {len(data)}")
+        self.repo.add(data)
+
         info("finish service add")
-        return None

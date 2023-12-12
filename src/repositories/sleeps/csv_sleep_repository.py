@@ -24,7 +24,7 @@ from common.log import (
 
 class CsvSleepRepository(CsvRepoInterface):
     """csv sleep repository """
-    COLUMNS = ['average_breath', 'average_breath_variation', 'average_heart_rate', 'average_hrv', 'awake_time',
+    COLUMNS = ['id', 'average_breath', 'average_breath_variation', 'average_heart_rate', 'average_hrv', 'awake_time',
                'bedtime_end', 'bedtime_start', 'contributors', 'day', 'deep_sleep_duration', 'efficiency', 'got_ups',
                'heart_rate', 'hrv', 'latency', 'light_sleep_duration', 'lowest_heart_rate',
                'lowest_heart_rate_time_offset', 'movement_30_sec', 'period', 'readiness', 'readiness_score_delta',
@@ -38,8 +38,21 @@ class CsvSleepRepository(CsvRepoInterface):
         self.config = Config().config
         self.sleep_path = self.config["CSV"]["SLEEP"]
 
-    def all(self):
-        pass
+    def all(self) -> list:
+        """_summary_
+
+        Returns:
+            list: _description_
+        """
+        info("start to get all csv data.")
+        self.check_file(self.sleep_path)
+        data = []
+        with open(self.sleep_path, "r", encoding="utf-8", newline="") as f:
+            reader = csv.DictReader(f)
+            data = [row for row in reader]
+
+        info(f"finish to get all csv data. all csv data num: {len(data)}")
+        return data
 
     def find_by_id(self, _id: int):
         pass
@@ -51,18 +64,13 @@ class CsvSleepRepository(CsvRepoInterface):
         """
         info("start to add sleep log into csv")
 
-        if not os.path.isfile(self.path):
-            pathlib.Path(self.path).touch()
-            warn(f"create a csv file since there was not the file. path: {self.path}")
+        self.check_file(self.sleep_path)
 
-        if not self.has_header():
-            self.write_header()
-
-        with open(self.path, 'a', encoding="utf-8", newline="") as f:
+        with open(self.sleep_path, 'a', encoding="utf-8", newline="") as f:
             for d in data:
                 writer = csv.DictWriter(f, fieldnames=self.COLUMNS)
                 writer.writerow(d)
-                info("added data into csv: {0}", d)
+                debug("added data into csv: {0}", d)
         info("finish to add sleep log into csv")
         return None
 
