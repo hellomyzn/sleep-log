@@ -31,7 +31,8 @@ class SleepController(object):
         """
 
         info("start to add sleep log")
-        s_ser = SleepService()
-        s_ser.get()
+        cr = CsvSleepRepository()
+        ssc = SleepService(cr)
+        sleep_data = ssc.get()
         info("finish to add sleep log")
         return None

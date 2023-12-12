@@ -4,8 +4,6 @@
 # Builtin packages
 #########################################################
 import csv
-import os
-import pathlib
 
 #########################################################
 # 3rd party packages
@@ -18,6 +16,7 @@ import pathlib
 from repositories.interfaces import CsvRepoInterface
 from common.config import Config
 from common.log import (
+    debug,
     info,
     warn
 )
@@ -35,8 +34,9 @@ class CsvSleepRepository(CsvRepoInterface):
                'midpoint_at_delta']
 
     def __init__(self):
+        super().__init__()
         self.config = Config().config
-        self.path = self.config["CSV"]["SLEEP"]
+        self.sleep_path = self.config["CSV"]["SLEEP"]
 
     def all(self):
         pass
