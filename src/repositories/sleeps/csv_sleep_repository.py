@@ -17,8 +17,7 @@ from repositories.interfaces import CsvRepoInterface
 from common.config import Config
 from common.log import (
     debug,
-    info,
-    warn
+    info
 )
 
 
@@ -51,7 +50,7 @@ class CsvSleepRepository(CsvRepoInterface):
             reader = csv.DictReader(f)
             data = [row for row in reader]
 
-        info(f"finish to get all csv data. all csv data num: {len(data)}")
+        info(f"finish to get all data from csv. all csv data num: {len(data)}")
         return data
 
     def find_by_id(self, _id: int):
@@ -62,7 +61,7 @@ class CsvSleepRepository(CsvRepoInterface):
         Returns:
             None: _description_
         """
-        info("start to add sleep log into csv")
+        info("start to add sleep log into csv. data: {0}", data)
 
         self.check_file(self.sleep_path)
 

@@ -34,16 +34,17 @@ class SleepService(object):
         Returns:
             dict: _description_
         """
-
         # get data
         path = self.config["OURA"]["SLEEP"]
         info("start to get sleep log. {0}", path)
+
         with open(path, mode="r", encoding="utf-8") as f:
             json_data = json.load(f)
             sleep_data = json_data["sleep"]
 
         # remove unnecessary data
         sleep_data = sleep_data[-10::]
+        info("finish to get sleep log. data len: {0}", len(sleep_data))
         return sleep_data
 
     def all(self) -> list:
@@ -74,6 +75,7 @@ class SleepService(object):
             datetime = fromisoformat_to_datetime(d["bedtime_start"])
             if latest_datetime < datetime:
                 new_data.append(d)
+
         info("finish to filter data by date. new data num: {0}", len(new_data))
         return new_data
 
