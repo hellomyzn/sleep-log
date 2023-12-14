@@ -34,23 +34,28 @@ class SleepService(object):
         Returns:
             dict: _description_
         """
-        info("start to get sleep log")
 
         # get data
         path = self.config["OURA"]["SLEEP"]
+        info("start to get sleep log. {0}", path)
         with open(path, mode="r", encoding="utf-8") as f:
             json_data = json.load(f)
             sleep_data = json_data["sleep"]
 
         # remove unnecessary data
-        # for s in sleep_data:
-            # con = s.pop("contributors", None)
         sleep_data = sleep_data[-10::]
-        info("finish to get sleep log. path: {0} data len: {1}", path, len(sleep_data))
-
         return sleep_data
 
-    def new(self, data) -> list:
+    def all(self) -> list:
+        """_summary_
+
+        Returns:
+            list: _description_
+        """
+        data = self.repo.all()
+        return data
+
+    def filter_data_by_datetime(self, data: list, datetime_str: str) -> list:
         """_summary_
 
         Args:
