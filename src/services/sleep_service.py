@@ -77,28 +77,28 @@ class SleepService(object):
         info("finish to filter data by date. new data num: {0}", len(new_data))
         return new_data
 
-    def put_id(self, data: list) -> list:
+    def put_id(self, data: list, next_id: int) -> list:
         """_summary_
 
         Args:
             data (list): _description_
+            _id (int): _description_
 
         Returns:
             list: _description_
         """
-        info(f"start to put id to each elements. data num: {len(data)}")
-        all_data = self.repo.all()
-        if len(all_data) == 0:
-            warn(f"there is no data. repo: {self.repo.__class__}")
-            _id = 1
-        else:
-            _id = int(all_data[-1]["id"]) + 1
+        info("start to put id to each elements. data num: {0}, next id: {1}", len(data), next_id)
+        data_with_id = []
+        for i, d in enumerate(data):
+            # 参照渡しの影響を考慮しd.copy()
+            # -> append(d)にすると参照元のdataにidが追加されてしまう
+            data_with_id.append(d.copy())
+            data_with_id[i]["id"] = next_id
+            next_id += 1
 
-        for d in data:
-            d.update({"id": _id})
-            _id += 1
+        info("finish to put id to each elements. next id: {0}", next_id)
+        return data_with_id
 
-        info(f"finish to put id to each elements. data: {data}")
         return data
 
     def add(self, data: list) -> None:
