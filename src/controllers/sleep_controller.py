@@ -34,25 +34,51 @@ class SleepController(object):
         ssc = SleepService(cr)
 
         sleep_data = ssc.get()
-        sleep_data_from_csv = ssc.all()
+        sleep_data_from_csv = ssc.all("sleep")
 
-        new_data = sleep_data
-        next_id = 1
+        new_sleep_data = sleep_data
+        next_id = int(ssc.get_latest_id("sleep")) + 1
         if sleep_data_from_csv:
             latest_datetime = sleep_data_from_csv[-1]["bedtime_start"]
-            next_id = int(sleep_data_from_csv[-1]["id"]) + 1
-            new_data = ssc.filter_data_by_datetime(sleep_data, latest_datetime)
+            new_sleep_data = ssc.filter_data_by_datetime(sleep_data, latest_datetime)
 
-        info(f"new data num: {len(new_data)}")
+        info(f"new data num: {len(new_sleep_data)}")
 
-        if new_data:
-            new_data_with_id = ssc.put_id(new_data, next_id)
+        if new_sleep_data:
+            new_sleep_data_with_id = ssc.put_id(new_sleep_data, next_id)
 
-            # remove unnecessary data
-            contributors = ssc.extract_from_sleep_data(new_data_with_id, "contributors")
-            heart_rate = ssc.extract_from_sleep_data(new_data_with_id, "heart_rate")
-            hrv = ssc.extract_from_sleep_data(new_data_with_id, "hrv")
-            readiness = ssc.extract_from_sleep_data(new_data_with_id, "readiness")
+            # separate dict from sleep data
+            contributors_without_id = ssc.extract_from_sleep_data(new_sleep_data_with_id, "contributors")
+            c_next_id = int(ssc.get_latest_id("contributors")) + 1
+            contributors = ssc.put_id(contributors_without_id, c_next_id)
 
-            # ssc.add(new_data_with_id)
+            heart_rate_without_id = ssc.extract_from_sleep_data(new_sleep_data_with_id, "heart_rate")
+            hr_next_id = int(ssc.get_latest_id("heart_rate")) + 1
+            heart_rate = ssc.put_id(heart_rate_without_id, hr_next_id)
+
+            hrv_without_id = ssc.extract_from_sleep_data(new_sleep_data_with_id, "hrv")
+            h_next_id = int(ssc.get_latest_id("hrv")) + 1
+            hrv = ssc.put_id(hrv_without_id, h_next_id)
+
+            readiness_without_id = ssc.extract_from_sleep_data(new_sleep_data_with_id, "readiness")
+            r_next_id = int(ssc.get_latest_id("readiness")) + 1
+            readiness = ssc.put_id(readiness_without_id, r_next_id)
+
+            for r in readiness:
+                readiness_contributors = r.pop("contributors")
+                r.update(readiness_contributors)
+
+            # transform from list to dict to add data type
+            sleep_dict = ssc.transform_to_dict("sleep", new_sleep_data_with_id)
+            contributors_dict = ssc.transform_to_dict("contributors", contributors)
+            heart_rate_dict = ssc.transform_to_dict("heart_rate", heart_rate)
+            hrv_dict = ssc.transform_to_dict("hrv", hrv)
+            readiness_dict = ssc.transform_to_dict("readiness", readiness)
+
+            ssc.add(sleep_dict)
+            ssc.add(contributors_dict)
+            ssc.add(heart_rate_dict)
+            ssc.add(hrv_dict)
+            ssc.add(readiness_dict)
+
         return None

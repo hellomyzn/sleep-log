@@ -26,10 +26,11 @@ class CsvRepoInterface(metaclass=abc.ABCMeta):
     COLUMNS = None
 
     def __init__(self):
-        pass
+        self.path = None
+        self.keys = None
 
     @abc.abstractmethod
-    def all(self):
+    def all(self, data_type: str):
         """all"""
         raise NotImplementedError()
 
@@ -46,6 +47,11 @@ class CsvRepoInterface(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def delete_by_id(self, _id: int):
         """delete by id"""
+        raise NotImplementedError()
+
+    @abc.abstractmethod
+    def tail(self, data_type: str, num: int) -> list:
+        """tail"""
         raise NotImplementedError()
 
     def check_file(self, path: str) -> None:
@@ -88,9 +94,9 @@ class CsvRepoInterface(metaclass=abc.ABCMeta):
                 warn(f"header does not exist. path: {path}")
                 return False
 
-            if not header == self.COLUMNS:
-                error(f"the csv's header is unexpected. columns: {header}, path: {path}")
-                raise Exception("can not continue since the header is not expected")
+            # if not header == self.COLUMNS:
+            #     error(f"the csv's header is unexpected. columns: {header}, path: {path}")
+            #     raise Exception("can not continue since the header is not expected")
 
             return True
 
@@ -102,7 +108,7 @@ class CsvRepoInterface(metaclass=abc.ABCMeta):
         """
         warn(f"write header. path: {path}")
         with open(path, "a", encoding="utf-8", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=self.COLUMNS)
+            writer = csv.DictWriter(f, fieldnames=self.keys)
             writer.writeheader()
 
         warn("successfully write header.")
