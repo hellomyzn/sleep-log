@@ -99,6 +99,32 @@ class SleepService(object):
         info("finish to put id to each elements. next id: {0}", next_id)
         return data_with_id
 
+    def extract_from_sleep_data(self, sleep_data: list, key: str) -> list:
+        """_summary_
+
+        Args:
+            sleep_data (list): _description_
+            key (str): _description_
+
+        Returns:
+            [list, list]: _description_
+        """
+        info("start extract data from sleep data. key: {0}, sleep data num: {1}", key, len(sleep_data))
+        data = []
+
+        for d in sleep_data:
+            data_id = d["id"]
+            try:
+                # 参照渡しの影響を考慮しd.copy()
+                # -> append(d)にすると参照元のdataにidが追加されてしまう
+                # TODO: sleep data参照元のkeyデータをid に変更する。
+                copied_data = d[key].copy()
+                copied_data["id"] = data_id
+                data.append(copied_data)
+            except KeyError as err:
+                warn("key({0}) is not a data. {1}: {2}, sleep data: {3}.", key,  err.__class__.__name__, err, d)
+
+        info("finish extract data from sleep data. key: {0}, extracted data: {1}", key, len(data))
         return data
 
     def add(self, data: list) -> None:
@@ -110,7 +136,4 @@ class SleepService(object):
         Returns:
             _type_: _description_
         """
-        info(f"start service add. data num: {len(data)}")
         self.repo.add(data)
-
-        info("finish service add")
