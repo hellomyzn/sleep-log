@@ -64,18 +64,9 @@ class SleepService(object):
         Returns:
             list: _description_
         """
-        info(f"start to retrieve new data. data num: {len(data)}")
-        # get latest data from csv
-        all_data = self.repo.all()
-        if len(all_data) == 0:
-            warn(f"there is no data. repo: {self.repo.__class__}")
-            return data
-        latest_data = all_data[-1]
-        # TODO: remove
-        print(latest_data)
+        info("start to filter data by date: {0}. data num: {1}", datetime_str, len(data))
 
-        # get "day" as latest date
-        latest_datetime = fromisoformat_to_datetime(latest_data["bedtime_start"])
+        latest_datetime = fromisoformat_to_datetime(datetime_str)
 
         # remove date before the date
         new_data = []
@@ -83,6 +74,7 @@ class SleepService(object):
             datetime = fromisoformat_to_datetime(d["bedtime_start"])
             if latest_datetime < datetime:
                 new_data.append(d)
+        info("finish to filter data by date. new data num: {0}", len(new_data))
         return new_data
 
     def put_id(self, data: list) -> list:
