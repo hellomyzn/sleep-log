@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 #########################################################
 # Own packages
 #########################################################
-from repositories.interfaces import CsvRepoInterface
+from repositories import CsvBaseRepository
 from common.config import Config
 from utils.helper import json_load
 
@@ -22,13 +22,7 @@ PATH_KEYS_HEART_RATE = CONFIG["KEYS_SLEEP"]["HEART_RATE"]
 
 
 @dataclass
-class CsvSleepHeartRateRepository(CsvRepoInterface):
+class CsvSleepHeartRateRepository(CsvBaseRepository):
     """csv sleep heart rate repository """
     path: str = field(init=False, default=PATH_HEART_RATE)
     keys = json_load(PATH_KEYS_HEART_RATE)["keys"]
-
-    def find_by_id(self, _id: int):
-        pass
-
-    def delete_by_id(self, _id: int):
-        pass
