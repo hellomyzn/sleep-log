@@ -16,7 +16,6 @@ import dataclasses
 from repositories.interfaces import CsvRepoInterface
 from common.config import Config
 from common.log import (
-    warn,
     debug,
     info
 )
@@ -29,8 +28,6 @@ class CsvSleepRepository(CsvRepoInterface):
     """csv sleep repository """
     # TODO: make conf and import them
     PATH_SLEEP = CONFIG["CSV_SLEEP"]["SLEEP"]
-    PATH_CONTRIBUTORS = CONFIG["CSV_SLEEP"]["CONTRIBUTORS"]
-    PATH_HEART_RATE = CONFIG["CSV_SLEEP"]["HEART_RATE"]
     PATH_HRV = CONFIG["CSV_SLEEP"]["HRV"]
     PATH_READINESS = CONFIG["CSV_SLEEP"]["READINESS"]
 
@@ -43,22 +40,11 @@ class CsvSleepRepository(CsvRepoInterface):
                   'sleep_phase_5_min', 'restless', 'timezone', 'bedtime_start_delta', 'bedtime_end_delta',
                   'midpoint_at_delta']
 
-    KEYS_CONTRIBUTORS = ['id', 'sleep_id', 'deep_sleep', 'efficiency', 'latency', 'rem_sleep',
-                         'restfulness', 'timing', 'total_sleep']
-    KEYS_HEART_RATE = ['id', 'sleep_id', 'interval', 'items', 'timestamp']
     KEYS_HRV = ['id', 'sleep_id', 'interval', 'items', 'timestamp']
     KEYS_READINESS = ['id', 'sleep_id', 'score', 'activity_balance', 'body_temperature', 'hrv_balance', 'previous_day_activity',
                       'previous_night', 'recovery_index', 'resting_heart_rate', 'sleep_balance', 'sleep_regularity', 'temperature_trend_deviation', 'temperature_deviation']
 
-    DATA_TYPE_SLEEP = "sleep"
-    DATA_TYPE_CONTRIBUTORS = "contributors"
-    DATA_TYPE_HEART_RATE = "heart_rate"
-    DATA_TYPE_HRV = "hrv"
-    DATA_TYPE_READINESS = "readiness"
-
     path: str = PATH_SLEEP
-    path_contributors: str = PATH_CONTRIBUTORS
-    path_heart_rate: str = PATH_HEART_RATE
     path_hrv: str = PATH_HRV
     path_readiness: str = PATH_READINESS
 
@@ -69,8 +55,6 @@ class CsvSleepRepository(CsvRepoInterface):
             list: _description_
         """
 
-        # TODO: remove it
-        # self.get_path_by_data_type(data_type)
         info("start to get all csv data.")
 
         self.check_file(self.path)
@@ -96,7 +80,6 @@ class CsvSleepRepository(CsvRepoInterface):
         """
         info("start to add sleep log into csv. data type: {0}, data num",
              data["data_type"], len(data["data"]))
-        self.get_path_by_data_type(data["data_type"])
 
         self.check_file(self.path)
 
@@ -107,33 +90,6 @@ class CsvSleepRepository(CsvRepoInterface):
                 debug("added data into csv: {0}", d)
         info("finish to add sleep log into csv")
         return None
-
-    def get_path_by_data_type(self, data_type: str) -> None:
-        """_summary_
-
-        Args:
-            data_type (str): _description_
-
-        Returns:
-            str: _description_
-        """
-        if data_type == self.DATA_TYPE_SLEEP:
-            self.path = self.PATH_SLEEP
-            self.keys = self.KEYS_SLEEP
-        elif data_type == self.DATA_TYPE_CONTRIBUTORS:
-            self.path = self.PATH_CONTRIBUTORS
-            self.keys = self.KEYS_CONTRIBUTORS
-        elif data_type == self.DATA_TYPE_HEART_RATE:
-            self.path = self.PATH_HEART_RATE
-            self.keys = self.KEYS_HEART_RATE
-        elif data_type == self.DATA_TYPE_HRV:
-            self.path = self.PATH_HRV
-            self.keys = self.KEYS_HRV
-        elif data_type == self.DATA_TYPE_READINESS:
-            self.path = self.PATH_READINESS
-            self.keys = self.KEYS_READINESS
-        else:
-            warn("nothing to match data type")
 
     def delete_by_id(self, _id: int):
         pass
@@ -149,7 +105,6 @@ class CsvSleepRepository(CsvRepoInterface):
             list: _description_
         """
 
-        self.get_path_by_data_type(data_type)
         info("start to tail")
 
         with open(self.path, 'r', encoding="utf-8") as f:
