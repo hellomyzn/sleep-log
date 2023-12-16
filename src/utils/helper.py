@@ -2,6 +2,7 @@
 #########################################################
 # Builtin packages
 #########################################################
+import json
 from datetime import datetime
 
 #########################################################
@@ -25,3 +26,17 @@ def fromisoformat_to_datetime(datetime_str: str) -> datetime:
         datetime: _description_
     """
     return datetime.fromisoformat(datetime_str).replace(tzinfo=None)
+
+
+def json_load(path: str) -> list:
+    """_summary_
+
+    Args:
+        path (str): _description_
+
+    Returns:
+        list: _description_
+    """
+    with open(path, mode="r", encoding="utf-8") as f:
+        json_load = json.load(f)
+    return json_load
