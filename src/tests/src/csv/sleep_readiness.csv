@@ -1,0 +1,4 @@
+id,sleep_id,score,activity_balance,body_temperature,hrv_balance,previous_day_activity,previous_night,recovery_index,resting_heart_rate,sleep_balance,sleep_regularity,temperature_trend_deviation,temperature_deviation
+1,1,81,,69,,96,94,80,100,,,,-0.9
+2,4,67,,100,,80,72,54,89,50,,0.45,-0.01
+3,6,84,66,100,,83,91,97,93,76,,0.66,-0.06

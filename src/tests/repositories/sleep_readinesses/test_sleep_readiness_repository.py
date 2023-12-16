@@ -12,7 +12,7 @@ import csv
 #########################################################
 # Own packages
 #########################################################
-from repositories.sleep_hrvs import CsvSleepHrvRepository
+from repositories.sleep_readinesses import CsvSleepReadinessRepository
 from common.config import Config
 
 CONFIG = Config().config
@@ -21,7 +21,7 @@ CONFIG = Config().config
 class TestCsvSleepHrvRepository(object):
     """test csv sleep heart rate repo"""
 
-    PATH = CONFIG["TEST_CSV_SLEEP"]["HRV"]
+    PATH = CONFIG["TEST_CSV_SLEEP"]["READINESS"]
 
     def test_all(self):
         """test all"""
@@ -31,7 +31,7 @@ class TestCsvSleepHrvRepository(object):
             reader = csv.DictReader(f)
             expected_data = [row for row in reader]
 
-        obj = CsvSleepHrvRepository()
+        obj = CsvSleepReadinessRepository()
         obj.path = csv_path
         actual = obj.all()
 
