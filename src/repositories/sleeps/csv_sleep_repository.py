@@ -1,9 +1,9 @@
 """csv sleep repository"""
-
 #########################################################
 # Builtin packages
 #########################################################
 import csv
+import dataclasses
 
 #########################################################
 # 3rd party packages
@@ -24,6 +24,7 @@ from common.log import (
 CONFIG = Config().config
 
 
+@dataclasses.dataclass
 class CsvSleepRepository(CsvRepoInterface):
     """csv sleep repository """
     # TODO: make conf and import them
@@ -55,22 +56,21 @@ class CsvSleepRepository(CsvRepoInterface):
     DATA_TYPE_HRV = "hrv"
     DATA_TYPE_READINESS = "readiness"
 
-    def __init__(self):
-        super().__init__()
-        self.path = None
-        self.keys = None
+    path: str = PATH_SLEEP
+    path_contributors: str = PATH_CONTRIBUTORS
+    path_heart_rate: str = PATH_HEART_RATE
+    path_hrv: str = PATH_HRV
+    path_readiness: str = PATH_READINESS
 
-    def all(self, data_type: str) -> list:
+    def all(self) -> list:
         """_summary_
-
-        Args:
-            data_type (str): _description_
 
         Returns:
             list: _description_
         """
 
-        self.get_path_by_data_type(data_type)
+        # TODO: remove it
+        # self.get_path_by_data_type(data_type)
         info("start to get all csv data.")
 
         self.check_file(self.path)
