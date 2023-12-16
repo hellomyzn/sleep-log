@@ -32,24 +32,6 @@ class CsvSleepHeartRateRepository(CsvRepoInterface):
     path: str = field(init=False, default=PATH_HEART_RATE)
     keys = json_load(PATH_KEYS_HEART_RATE)["keys"]
 
-    def all(self) -> list:
-        """_summary_
-
-        Returns:
-            list: _description_
-        """
-
-        info("start to get all csv data.")
-
-        self.check_file(self.path)
-
-        with open(self.path, "r", encoding="utf-8", newline="") as f:
-            reader = csv.DictReader(f)
-            data = [row for row in reader]
-
-        info(f"finish to get all data from csv. all csv data num: {len(data)}")
-        return data
-
     def find_by_id(self, _id: int):
         pass
 
@@ -77,25 +59,3 @@ class CsvSleepHeartRateRepository(CsvRepoInterface):
 
     def delete_by_id(self, _id: int):
         pass
-
-    def tail(self, data_type: str, num: int) -> list:
-        """_summary_
-
-        Args:
-            data_type (str): _description_
-            num (int): _description_
-
-        Returns:
-            list: _description_
-        """
-
-        info("start to tail")
-
-        with open(self.path, 'r', encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            tail_lines = []
-            for r in reader:
-                tail_lines.append(r)
-
-        info("finish to tail")
-        return tail_lines[-num:]

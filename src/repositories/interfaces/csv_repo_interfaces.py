@@ -16,6 +16,7 @@ import pathlib
 # Own packages
 #########################################################
 from common.log import (
+    info,
     warn,
     error
 )
@@ -29,10 +30,21 @@ class CsvRepoInterface(metaclass=abc.ABCMeta):
         self.path = None
         self.keys = None
 
-    @abc.abstractmethod
-    def all(self, data_type: str):
-        """all"""
-        raise NotImplementedError()
+    def all(self) -> list:
+        """_summary_
+
+        Returns:
+            list: _description_
+        """
+        info("start to get all csv data.")
+        self.check_file(self.path)
+
+        with open(self.path, "r", encoding="utf-8", newline="") as f:
+            reader = csv.DictReader(f)
+            data = [row for row in reader]
+
+        info(f"finish to get all data from csv. all csv data num: {len(data)}")
+        return data
 
     @abc.abstractmethod
     def find_by_id(self, _id: int):
@@ -49,13 +61,13 @@ class CsvRepoInterface(metaclass=abc.ABCMeta):
         """delete by id"""
         raise NotImplementedError()
 
-    @abc.abstractmethod
-    def tail(self, data_type: str, num: int) -> list:
-        """tail"""
-        raise NotImplementedError()
-
+    # TODO: move into helper
     def check_file(self, path: str) -> None:
-        # TODO: make decorator
+        """_summary_
+
+        Args:
+            path (str): _description_
+        """
         if not self.file_exists(path):
             pathlib.Path(path).touch()
             warn(f"create a csv file since there was not the file. path: {path}")
@@ -112,3 +124,25 @@ class CsvRepoInterface(metaclass=abc.ABCMeta):
             writer.writeheader()
 
         warn("successfully write header.")
+
+    def tail(self, data_type: str, num: int) -> list:
+        """_summary_
+
+        Args:
+            data_type (str): _description_
+            num (int): _description_
+
+        Returns:
+            list: _description_
+        """
+
+        info("start to tail")
+
+        with open(self.path, 'r', encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            tail_lines = []
+            for r in reader:
+                tail_lines.append(r)
+
+        info("finish to tail")
+        return tail_lines[-num:]
