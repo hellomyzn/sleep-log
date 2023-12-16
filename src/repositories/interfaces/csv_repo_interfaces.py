@@ -4,6 +4,7 @@
 #########################################################
 import abc
 import csv
+from dataclasses import dataclass
 import os
 import pathlib
 
@@ -18,17 +19,24 @@ import pathlib
 from common.log import (
     info,
     warn,
-    error
+    debug
 )
 
 
+@dataclass
 class CsvRepoInterface(metaclass=abc.ABCMeta):
     """csv repository interface"""
-    COLUMNS = None
+    path: str = None
 
-    def __init__(self):
-        self.path = None
-        self.keys = None
+    @abc.abstractmethod
+    def find_by_id(self, id_: int):
+        """find by id"""
+        raise NotImplementedError()
+
+    @abc.abstractmethod
+    def delete_by_id(self, id_: int):
+        """delete by id"""
+        raise NotImplementedError()
 
     def all(self) -> list:
         """_summary_
@@ -46,22 +54,30 @@ class CsvRepoInterface(metaclass=abc.ABCMeta):
         info(f"finish to get all data from csv. all csv data num: {len(data)}")
         return data
 
-    @abc.abstractmethod
-    def find_by_id(self, _id: int):
-        """find by id"""
-        raise NotImplementedError()
+    def add(self, data: dict) -> None:
+        """_summary_
 
-    @abc.abstractmethod
-    def add(self, data: dict):
-        """add"""
-        raise NotImplementedError()
+        Args:
+            data (dict): _description_
 
-    @abc.abstractmethod
-    def delete_by_id(self, _id: int):
-        """delete by id"""
-        raise NotImplementedError()
+        Returns:
+            _type_: _description_
+        """
+        info("start to add sleep log into csv. data type: {0}, data num",
+             data["data_type"], len(data["data"]))
+
+        self.check_file(self.path)
+
+        with open(self.path, 'a', encoding="utf-8", newline="") as f:
+            for d in data["data"]:
+                writer = csv.DictWriter(f, fieldnames=self.keys)
+                writer.writerow(d)
+                debug("added data into csv: {0}", d)
+        info("finish to add sleep log into csv")
+        return None
 
     # TODO: move into helper
+
     def check_file(self, path: str) -> None:
         """_summary_
 
@@ -125,17 +141,15 @@ class CsvRepoInterface(metaclass=abc.ABCMeta):
 
         warn("successfully write header.")
 
-    def tail(self, data_type: str, num: int) -> list:
+    def tail(self, num: int) -> list:
         """_summary_
 
         Args:
-            data_type (str): _description_
             num (int): _description_
 
         Returns:
             list: _description_
         """
-
         info("start to tail")
 
         with open(self.path, 'r', encoding="utf-8") as f:
