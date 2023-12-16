@@ -3,7 +3,7 @@
 # Builtin packages
 #########################################################
 import csv
-import dataclasses
+from dataclasses import dataclass, field
 
 #########################################################
 # 3rd party packages
@@ -16,7 +16,6 @@ import dataclasses
 from repositories.interfaces import CsvRepoInterface
 from common.config import Config
 from common.log import (
-    warn,
     debug,
     info
 )
@@ -24,7 +23,7 @@ from common.log import (
 CONFIG = Config().config
 
 
-@dataclasses.dataclass
+@dataclass
 class CsvSleepContributorsContributor(CsvRepoInterface):
     """csv sleep repository """
     # TODO: make conf and import them
@@ -33,8 +32,7 @@ class CsvSleepContributorsContributor(CsvRepoInterface):
     KEYS_CONTRIBUTORS = ['id', 'sleep_id', 'deep_sleep', 'efficiency', 'latency', 'rem_sleep',
                          'restfulness', 'timing', 'total_sleep']
 
-    path: str = PATH_CONTRIBUTORS
-    key: str = PATH_CONTRIBUTORS
+    path: str = field(init=False, default=PATH_CONTRIBUTORS)
 
     def all(self) -> list:
         """_summary_
