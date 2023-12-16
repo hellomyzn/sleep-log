@@ -1,4 +1,4 @@
-"""test csv sleep contributors repository"""
+"""test csv sleep repository"""
 #########################################################
 # Builtin packages
 #########################################################
@@ -12,16 +12,16 @@ import csv
 #########################################################
 # Own packages
 #########################################################
-from repositories.sleep_contributors import CsvSleepContributorsContributor
+from repositories import CsvBaseRepository
 from common.config import Config
 
 CONFIG = Config().config
 
 
-class TestCsvSleepContributorsRepository(object):
-    """test csv sleep contributors repo"""
+class TestCsvSleepRepository(object):
+    """test csv sleep repo"""
 
-    PATH = CONFIG["TEST_CSV_SLEEP"]["CONTRIBUTORS"]
+    PATH = CONFIG["TEST"]["CSV_SLEEP"]
 
     def test_all(self):
         """test all"""
@@ -31,7 +31,7 @@ class TestCsvSleepContributorsRepository(object):
             reader = csv.DictReader(f)
             expected_data = [row for row in reader]
 
-        obj = CsvSleepContributorsContributor()
+        obj = CsvBaseRepository()
         obj.path = csv_path
         actual = obj.all()
 
