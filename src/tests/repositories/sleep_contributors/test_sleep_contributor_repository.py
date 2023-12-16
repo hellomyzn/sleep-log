@@ -1,4 +1,4 @@
-"""test csv sleep repository"""
+"""test csv sleep contributors repository"""
 #########################################################
 # Builtin packages
 #########################################################
@@ -12,21 +12,21 @@ import csv
 #########################################################
 # Own packages
 #########################################################
-from repositories.sleeps import CsvSleepRepository
+from repositories.sleep_contributors import CsvSleepContributorsContributor
 
 
-class TestCsvSleepRepository(object):
+class TestCsvSleepContributorsRepository(object):
     """test csv sleep repo"""
 
     def test_all(self):
         """test all"""
-        csv_path = "tests/src/csv/sleep.csv"
+        csv_path = "tests/src/csv/sleep_contributors.csv"
 
         with open(csv_path, "r", encoding="utf-8", newline="") as f:
             reader = csv.DictReader(f)
             expected_data = [row for row in reader]
 
-        obj = CsvSleepRepository()
+        obj = CsvSleepContributorsContributor()
         obj.path = csv_path
         actual = obj.all()
 

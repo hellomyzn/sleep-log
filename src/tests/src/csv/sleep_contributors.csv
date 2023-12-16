@@ -1,0 +1,4 @@
+id,sleep_id,deep_sleep,efficiency,latency,rem_sleep,restfulness,timing,total_sleep
+1,1,97,72,97,100,81,100,100
+2,2,1,1,59,1,99,1,1
+3,3,1,1,59,1,99,18,1
