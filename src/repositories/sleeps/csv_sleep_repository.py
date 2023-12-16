@@ -3,7 +3,7 @@
 # Builtin packages
 #########################################################
 import csv
-import dataclasses
+from dataclasses import dataclass, field
 
 #########################################################
 # 3rd party packages
@@ -19,26 +19,18 @@ from common.log import (
     debug,
     info
 )
+from utils.helper import json_load
 
 CONFIG = Config().config
+PATH_SLEEP = CONFIG["CSV_SLEEP"]["SLEEP"]
+PATH_KEYS_SLEEP = CONFIG["KEYS_SLEEP"]["SLEEP"]
 
 
-@dataclasses.dataclass
+@dataclass
 class CsvSleepRepository(CsvRepoInterface):
     """csv sleep repository """
-    # TODO: make conf and import them
-    PATH_SLEEP = CONFIG["CSV_SLEEP"]["SLEEP"]
-
-    KEYS_SLEEP = ['id', 'average_breath', 'average_breath_variation', 'average_heart_rate', 'average_hrv', 'awake_time',
-                  'bedtime_end', 'bedtime_start', 'contributors', 'day', 'deep_sleep_duration', 'efficiency', 'got_ups',
-                  'heart_rate', 'hrv', 'latency', 'light_sleep_duration', 'lowest_heart_rate',
-                  'lowest_heart_rate_time_offset', 'movement_30_sec', 'period', 'readiness', 'readiness_score_delta',
-                  'rem_sleep_duration', 'restless_periods', 'score', 'segment_state', 'sleep_algorithm_version',
-                  'sleep_midpoint', 'sleep_score_delta', 'time_in_bed', 'total_sleep_duration', 'type', 'wake_ups',
-                  'sleep_phase_5_min', 'restless', 'timezone', 'bedtime_start_delta', 'bedtime_end_delta',
-                  'midpoint_at_delta']
-
-    path: str = PATH_SLEEP
+    keys = json_load(PATH_KEYS_SLEEP)["keys"]
+    path: str = field(init=False, default=PATH_SLEEP)
 
     def all(self) -> list:
         """_summary_

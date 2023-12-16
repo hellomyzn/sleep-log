@@ -19,17 +19,17 @@ from common.log import (
     debug,
     info
 )
+from utils.helper import json_load
 
 CONFIG = Config().config
+PATH_HRV = CONFIG["CSV_SLEEP"]["HRV"]
+PATH_KEYS_HRV = CONFIG["KEYS_SLEEP"]["HRV"]
 
 
 @dataclass
 class CsvSleepHrvRepository(CsvRepoInterface):
     """csv sleep hrv repository """
-    # TODO: make conf and import them
-    PATH_HRV = CONFIG["CSV_SLEEP"]["HRV"]
-    KEYS_HRV = ['id', 'sleep_id', 'interval', 'items', 'timestamp']
-
+    keys = json_load(PATH_KEYS_HRV)["keys"]
     path: str = field(init=False, default=PATH_HRV)
 
     def all(self) -> list:

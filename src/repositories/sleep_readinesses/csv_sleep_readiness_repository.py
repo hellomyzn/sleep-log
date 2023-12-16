@@ -19,20 +19,17 @@ from common.log import (
     debug,
     info
 )
+from utils.helper import json_load
 
 CONFIG = Config().config
+PATH_READINESS = CONFIG["CSV_SLEEP"]["READINESS"]
+PATH_KEYS_READINESS = CONFIG["KEYS_SLEEP"]["READINESS"]
 
 
 @dataclass
 class CsvSleepReadinessRepository(CsvRepoInterface):
     """csv sleep readiness repository """
-    # TODO: make conf and import them
-    PATH_READINESS = CONFIG["CSV_SLEEP"]["READINESS"]
-    KEYS_READINESS = ['id', 'sleep_id', 'score', 'activity_balance', 'body_temperature',
-                      'hrv_balance', 'previous_day_activity', 'previous_night',
-                      'recovery_index', 'resting_heart_rate', 'sleep_balance',
-                      'sleep_regularity', 'temperature_trend_deviation', 'temperature_deviation']
-
+    keys = json_load(PATH_KEYS_READINESS)["keys"]
     path: str = field(init=False, default=PATH_READINESS)
 
     def all(self) -> list:

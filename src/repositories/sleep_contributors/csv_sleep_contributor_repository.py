@@ -19,19 +19,17 @@ from common.log import (
     debug,
     info
 )
+from utils.helper import json_load
 
 CONFIG = Config().config
+PATH_CONTRIBUTORS = CONFIG["CSV_SLEEP"]["CONTRIBUTORS"]
+PATH_KEYS_CONTRIBUTORS = CONFIG["KEYS_SLEEP"]["CONTRIBUTORS"]
 
 
 @dataclass
 class CsvSleepContributorsContributor(CsvRepoInterface):
     """csv sleep repository """
-    # TODO: make conf and import them
-    PATH_CONTRIBUTORS = CONFIG["CSV_SLEEP"]["CONTRIBUTORS"]
-
-    KEYS_CONTRIBUTORS = ['id', 'sleep_id', 'deep_sleep', 'efficiency', 'latency', 'rem_sleep',
-                         'restfulness', 'timing', 'total_sleep']
-
+    keys = json_load(PATH_KEYS_CONTRIBUTORS)["keys"]
     path: str = field(init=False, default=PATH_CONTRIBUTORS)
 
     def all(self) -> list:

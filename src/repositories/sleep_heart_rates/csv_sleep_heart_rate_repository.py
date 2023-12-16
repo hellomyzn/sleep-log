@@ -19,18 +19,18 @@ from common.log import (
     debug,
     info
 )
+from utils.helper import json_load
 
 CONFIG = Config().config
+PATH_HEART_RATE = CONFIG["CSV_SLEEP"]["HEART_RATE"]
+PATH_KEYS_HEART_RATE = CONFIG["KEYS_SLEEP"]["HEART_RATE"]
 
 
 @dataclass
 class CsvSleepHeartRateRepository(CsvRepoInterface):
     """csv sleep repository """
-    # TODO: make conf and import them
-    PATH_HEART_RATE = CONFIG["CSV_SLEEP"]["HEART_RATE"]
-    KEYS_HEART_RATE = ['id', 'sleep_id', 'interval', 'items', 'timestamp']
-
     path: str = field(init=False, default=PATH_HEART_RATE)
+    keys = json_load(PATH_KEYS_HEART_RATE)["keys"]
 
     def all(self) -> list:
         """_summary_
