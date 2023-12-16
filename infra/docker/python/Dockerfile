@@ -3,6 +3,9 @@ FROM python:3.11
 USER root
 RUN mkdir /opt/work
 
+# python path
+ENV PYTHONPATH=/opt/work/
+
 # poetry
 # install path
 ENV POETRY_HOME=/opt/poetry
