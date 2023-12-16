@@ -42,7 +42,7 @@ class Config(Singleton):
         return self.__config
 
     def __initialize(self) -> ConfigParser:
-        config_file = 'common/config/config.ini'
+        config_file = '/opt/work/common/config/config.ini'
 
         if self.__config is not None:
             return self.__config
@@ -51,7 +51,7 @@ class Config(Singleton):
         config.read(config_file, encoding="utf-8")
 
         if config["APP"]["ENV"] == "DEV":
-            config_file = 'common/config/config.dev.ini'
+            config_file = '/opt/work/common/config/config.dev.ini'
             config.read(config_file, encoding="utf-8")
             return config
 
