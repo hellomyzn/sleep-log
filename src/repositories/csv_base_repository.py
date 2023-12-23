@@ -18,8 +18,7 @@ import pathlib
 from repositories.interfaces import RepoInterface
 from common.log import (
     info,
-    warn,
-    debug
+    warn
 )
 
 
