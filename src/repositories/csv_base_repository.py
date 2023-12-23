@@ -15,7 +15,7 @@ import pathlib
 #########################################################
 # Own packages
 #########################################################
-from repositories.interfaces import CsvRepoInterface
+from repositories.interfaces import RepoInterface
 from common.log import (
     info,
     warn,
@@ -24,7 +24,7 @@ from common.log import (
 
 
 @dataclass
-class CsvBaseRepository(CsvRepoInterface):
+class CsvBaseRepository(RepoInterface):
     """csv base repository"""
     path: str = None
     keys: list = field(init=False, default_factory=list)

@@ -12,7 +12,7 @@
 #########################################################
 # Own packages
 #########################################################
-from repositories.interfaces import CsvRepoInterface
+from repositories.interfaces import RepoInterface
 from services import BaseService
 from common.log import (
     warn,
@@ -24,11 +24,9 @@ from common.log import (
 class SubDataBaseService(BaseService):
     """SubDataService service"""
 
-    def __init__(self, csv_repo: CsvRepoInterface, key: str):
+    def __init__(self, repo: RepoInterface, key: str):
         self.key = key
-        super().__init__(
-            csv_repo=csv_repo
-        )
+        super().__init__(repo)
 
     def extract_from(self, from_data: list) -> list:
         """_summary_
@@ -74,7 +72,7 @@ class SubDataBaseService(BaseService):
         Returns:
             int: _description_
         """
-        all_data = self.csv_repo.all()
+        all_data = self.repo.all()
         latest_id = 0
 
         if all_data:

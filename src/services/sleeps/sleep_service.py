@@ -12,7 +12,7 @@ import json
 #########################################################
 # Own packages
 #########################################################
-from repositories.sleep.sleeps import CsvSleepRepository
+from repositories.interfaces import RepoInterface
 from services import BaseService
 from utils.helper import fromisoformat_to_datetime
 from common.log import (
@@ -23,10 +23,8 @@ from common.log import (
 class SleepService(BaseService):
     """sleep service"""
 
-    def __init__(self):
-        super().__init__(
-            csv_repo=CsvSleepRepository()
-        )
+    def __init__(self, repo: RepoInterface):
+        super().__init__(repo)
 
     def get_new_data(self) -> list:
         """_summary_
@@ -50,7 +48,6 @@ class SleepService(BaseService):
         next_sleep_id = latest_id + 1
         sleep_data_with_id = self._add_ids(new_sleep_data, next_sleep_id)
 
-        # TODO: remove
         sleep_data_with_id = sleep_data_with_id[-10:]
         info("new sleep data num: {0}", len(sleep_data_with_id))
         return sleep_data_with_id

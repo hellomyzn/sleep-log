@@ -1,2 +1,2 @@
 """repo interfaces"""
-from .csv_repo_interfaces import CsvRepoInterface
+from .repo_interfaces import RepoInterface

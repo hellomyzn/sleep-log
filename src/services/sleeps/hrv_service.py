@@ -12,15 +12,15 @@
 #########################################################
 # Own packages
 #########################################################
-from repositories.sleep.hrvs import CsvSleepHrvRepository
+from repositories.interfaces import RepoInterface
 from services import SubDataBaseService
 
 
 class SleepHrvService(SubDataBaseService):
     """sleep hrv service"""
 
-    def __init__(self):
+    def __init__(self, repo: RepoInterface):
         super().__init__(
-            csv_repo=CsvSleepHrvRepository(),
+            repo=repo,
             key="hrv"
         )

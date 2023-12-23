@@ -15,7 +15,7 @@ import abc
 # (None)
 
 
-class CsvRepoInterface(metaclass=abc.ABCMeta):
+class RepoInterface(metaclass=abc.ABCMeta):
     """csv repository interface"""
     @abc.abstractmethod
     def all(self) -> list:

@@ -12,15 +12,15 @@
 #########################################################
 # Own packages
 #########################################################
-from repositories.sleep.heart_rates import CsvSleepHeartRateRepository
+from repositories.interfaces import RepoInterface
 from services import SubDataBaseService
 
 
 class SleepHeartRateService(SubDataBaseService):
     """sleep contributor service"""
 
-    def __init__(self):
+    def __init__(self, repo: RepoInterface):
         super().__init__(
-            csv_repo=CsvSleepHeartRateRepository(),
+            repo=repo,
             key="heart_rate"
         )

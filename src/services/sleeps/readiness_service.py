@@ -12,7 +12,7 @@
 #########################################################
 # Own packages
 #########################################################
-from repositories.sleep.readinesses import CsvSleepReadinessRepository
+from repositories.interfaces import RepoInterface
 from services import SubDataBaseService
 from common.log import (
     warn,
@@ -24,9 +24,9 @@ from common.log import (
 class SleepReadinessService(SubDataBaseService):
     """sleep readiness service"""
 
-    def __init__(self):
+    def __init__(self, repo: RepoInterface):
         super().__init__(
-            csv_repo=CsvSleepReadinessRepository(),
+            repo=repo,
             key="readiness"
         )
 
