@@ -44,18 +44,18 @@ class SubDataBaseService(BaseService):
         for d in from_data:
             from_data_id = d["id"]
             try:
-                # 参照渡しの影響を考慮しd.copy()
-                # -> append(d)にすると参照元のdataにidが追加されてしまう
-                copied_d = d[self.key].copy()
-                copied_d["sleep_id"] = from_data_id
-                copied_d["id"] = data_id
-                data.append(copied_d)
+                popped_data = d.pop(self.key)
+                popped_data["sleep_id"] = from_data_id
+                popped_data["id"] = data_id
+                data.append(popped_data)
 
                 # replace from value to id
-                d.update({self.key: data_id})
-                data_id += 1
+                new_key = f"sleep_{self.key}_id"
+                d[new_key] = data_id
+
                 debug("update data. data id: {0}, data[{1}]: {2}",
-                      d["id"], self.key, d[self.key])
+                      d["id"], new_key, d[new_key])
+                data_id += 1
             except KeyError as err:
                 warn("key({0}) is not in a data. {1}: {2}, sleep data: {3}.",
                      self.key,  err.__class__.__name__, err, d)

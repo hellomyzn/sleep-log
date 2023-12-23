@@ -48,19 +48,21 @@ class SleepReadinessService(SubDataBaseService):
             try:
                 # 参照渡しの影響を考慮しd.copy()
                 # -> append(d)にすると参照元のdataにidが追加されてしまう
-                copied_d = d[self.key].copy()
-                copied_d["sleep_id"] = from_data_id
-                copied_d["id"] = data_id
+                popped_d = d.pop(self.key)
+                popped_d["sleep_id"] = from_data_id
+                popped_d["id"] = data_id
                 # sleep readiness data has contributors dict
-                readiness_contributors = copied_d.pop("contributors")
-                copied_d.update(readiness_contributors)
+                readiness_contributors = popped_d.pop("contributors")
+                popped_d.update(readiness_contributors)
                 # add
-                data.append(copied_d)
+                data.append(popped_d)
 
                 # replace from value to id
-                d.update({self.key: data_id})
+                new_key = f"sleep_{self.key}_id"
+                d[new_key] = data_id
+
                 debug("update data. data id: {0}, data[{1}]: {2}",
-                      d["id"], self.key, d[self.key])
+                      d["id"], new_key, d[new_key])
                 data_id += 1
             except KeyError as err:
                 warn("key({0}) is not in a data. {1}: {2}, sleep data: {3}.",

@@ -48,7 +48,8 @@ class SleepService(BaseService):
         next_sleep_id = latest_id + 1
         sleep_data_with_id = self._add_ids(new_sleep_data, next_sleep_id)
 
-        sleep_data_with_id = sleep_data_with_id[-10:]
+        # TODO: remove
+        sleep_data_with_id = sleep_data_with_id[0:100]
         info("new sleep data num: {0}", len(sleep_data_with_id))
         return sleep_data_with_id
 

@@ -1,4 +1,4 @@
-"""gss sleep repository"""
+"""gss sleep hrv repository"""
 #########################################################
 # Builtin packages
 #########################################################
@@ -17,12 +17,12 @@ from common.config import Config
 from utils.helper import json_load
 
 CONFIG = Config().config
-SHEET_NAME = CONFIG["GSS_SHEET_NAME"]["SLEEP"]
-PATH_KEYS = CONFIG["KEYS_SLEEP"]["SLEEP"]
+SHEET_NAME = CONFIG["GSS_SHEET_NAME"]["HRV"]
+PATH_KEYS = CONFIG["KEYS_SLEEP"]["HRV"]
 
 
 @dataclass
-class GssSleepRepository(GssBaseRepository):
+class GssSleepHrvRepository(GssBaseRepository):
     """gss sleep repository """
     sheet: str = field(init=False, default=SHEET_NAME)
     keys: list = field(init=False, default_factory=lambda: json_load(PATH_KEYS)["keys"])
