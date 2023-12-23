@@ -42,7 +42,7 @@ class CsvBaseRepository(CsvRepoInterface):
             reader = csv.DictReader(f)
             data = [row for row in reader]
 
-        info("got all csv. data num: {0}", {len(data)})
+        info("got all csv. data num: {0}", len(data))
         return data
 
     def find_by_id(self, id_: int):

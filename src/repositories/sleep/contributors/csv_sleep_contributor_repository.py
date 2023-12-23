@@ -22,7 +22,7 @@ PATH_KEYS_CONTRIBUTORS = CONFIG["KEYS_SLEEP"]["CONTRIBUTORS"]
 
 
 @dataclass
-class CsvSleepContributorsContributor(CsvBaseRepository):
+class CsvSleepContributorRepository(CsvBaseRepository):
     """csv sleep contributors repository """
     keys = json_load(PATH_KEYS_CONTRIBUTORS)["keys"]
     path: str = field(init=False, default=PATH_CONTRIBUTORS)
