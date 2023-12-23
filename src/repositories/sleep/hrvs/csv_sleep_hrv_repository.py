@@ -17,12 +17,12 @@ from common.config import Config
 from utils.helper import json_load
 
 CONFIG = Config().config
-PATH_HRV = CONFIG["CSV_SLEEP"]["HRV"]
-PATH_KEYS_HRV = CONFIG["KEYS_SLEEP"]["HRV"]
+PATH_CSV = CONFIG["CSV_SLEEP"]["HRV"]
+PATH_KEYS = CONFIG["KEYS_SLEEP"]["HRV"]
 
 
 @dataclass
 class CsvSleepHrvRepository(CsvBaseRepository):
     """csv sleep hrv repository """
-    keys = json_load(PATH_KEYS_HRV)["keys"]
-    path: str = field(init=False, default=PATH_HRV)
+    path: str = field(init=False, default=PATH_CSV)
+    keys: list = field(init=False, default_factory=lambda: json_load(PATH_KEYS)["keys"])

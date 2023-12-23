@@ -17,12 +17,12 @@ from common.config import Config
 from utils.helper import json_load
 
 CONFIG = Config().config
-PATH_CONTRIBUTORS = CONFIG["CSV_SLEEP"]["CONTRIBUTORS"]
-PATH_KEYS_CONTRIBUTORS = CONFIG["KEYS_SLEEP"]["CONTRIBUTORS"]
+PATH_CSV = CONFIG["CSV_SLEEP"]["CONTRIBUTORS"]
+PATH_KEYS = CONFIG["KEYS_SLEEP"]["CONTRIBUTORS"]
 
 
 @dataclass
 class CsvSleepContributorRepository(CsvBaseRepository):
     """csv sleep contributors repository """
-    keys = json_load(PATH_KEYS_CONTRIBUTORS)["keys"]
-    path: str = field(init=False, default=PATH_CONTRIBUTORS)
+    path: str = field(init=False, default=PATH_CSV)
+    keys: list = field(init=False, default_factory=lambda: json_load(PATH_KEYS)["keys"])

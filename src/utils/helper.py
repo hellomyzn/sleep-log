@@ -38,5 +38,5 @@ def json_load(path: str) -> list:
         list: _description_
     """
     with open(path, mode="r", encoding="utf-8") as f:
-        json_load = json.load(f)
-    return json_load
+        json_load_ = json.load(f)
+    return json_load_

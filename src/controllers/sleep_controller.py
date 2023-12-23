@@ -33,27 +33,20 @@ class SleepController(object):
 
         contributors_ser = SleepContributorService()
         contributors = contributors_ser.extract_from(new_sleep_data)
+        contributors_ser.add(contributors)
 
         heart_rate_ser = SleepHeartRateService()
         heart_rate = heart_rate_ser.extract_from(new_sleep_data)
+        heart_rate_ser.add(heart_rate)
 
         hrv_ser = SleepHrvService()
         hrv = hrv_ser.extract_from(new_sleep_data)
+        hrv_ser.add(hrv)
 
         readiness_ser = SleepReadinessService()
         readiness = readiness_ser.extract_from(new_sleep_data)
+        readiness_ser.add(readiness)
 
-        # # transform from list to dict to add data type
-        # sleep_dict = ss.transform_to_dict("sleep", new_sleep_data_with_id)
-        # contributors_dict = ss.transform_to_dict("contributors", contributors)
-        # heart_rate_dict = ss.transform_to_dict("heart_rate", heart_rate)
-        # hrv_dict = ss.transform_to_dict("hrv", hrv)
-        # readiness_dict = ss.transform_to_dict("readiness", readiness)
-
-        # ss.add(sleep_dict)
-        # ss.add(contributors_dict)
-        # ss.add(heart_rate_dict)
-        # ss.add(hrv_dict)
-        # ss.add(readiness_dict)
+        sleep_ser.add(new_sleep_data)
 
         return None

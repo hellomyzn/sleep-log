@@ -53,22 +53,15 @@ class CsvBaseRepository(CsvRepoInterface):
 
         Args:
             data (dict): _description_
-
-        Returns:
-            _type_: _description_
         """
-        info("start to add sleep log into csv. data type: {0}, data num",
-             data["data_type"], len(data["data"]))
+        info("add sleep log into csv. data num: {0}", len(data))
 
         self.check_file(self.path)
 
         with open(self.path, 'a', encoding="utf-8", newline="") as f:
-            for d in data["data"]:
+            for d in data:
                 writer = csv.DictWriter(f, fieldnames=self.keys)
                 writer.writerow(d)
-                debug("added data into csv: {0}", d)
-        info("finish to add sleep log into csv")
-        return None
 
     def update(self, data: dict):
         pass

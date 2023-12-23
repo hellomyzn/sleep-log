@@ -15,8 +15,7 @@ import copy
 from repositories.interfaces import CsvRepoInterface
 from common.config import Config
 from common.log import (
-    debug,
-    info
+    debug
 )
 
 
@@ -46,7 +45,7 @@ class BaseService(object):
         """
         self.csv_repo.add(data)
 
-    def add_ids(self, data: list, id_: int) -> list:
+    def _add_ids(self, data: list, id_: int) -> list:
         """_summary_
 
         Args:
@@ -65,20 +64,3 @@ class BaseService(object):
             id_ += 1
 
         return data_with_id
-
-    def transform_to_dict(self, data_type: str, data: list) -> dict:
-        """_summary_
-
-        Args:
-            data_type (str): _description_
-            data (list): _description_
-
-        Returns:
-            list: _description_
-        """
-        info("start to add data type. data type: {0}", data_type)
-        data_dict = {"data_type": data_type, "data": data}
-
-        info("finish to add data type. data type: {0}, data num: {1}",
-             data_dict["data_type"], len(data_dict["data"]))
-        return data_dict
