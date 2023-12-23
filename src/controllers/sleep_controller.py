@@ -12,78 +12,54 @@
 #########################################################
 # Own packages
 #########################################################
-from repositories.sleeps import CsvSleepRepository
-from services import SleepService
-from common.log import (
-    info
-)
+from services.sleeps import SleepService
+from services.sleeps import SleepContributorService
+from services.sleeps import SleepHeartRateService
+from services.sleeps import SleepHrvService
+from services.sleeps import SleepReadinessService
 
 
 class SleepController(object):
     """sleep controller"""
-
-    def __init__(self):
-        return None
 
     def add(self) -> None:
         """add sleep log
         Returns:
             None: _description_
         """
-        csr = CsvSleepRepository()
-        ssc = SleepService(csr)
 
-        sleep_data_from_csv = ssc.all()
-        new_sleep_data = ssc.get()
+        sleep_ser = SleepService()
+        new_sleep_data = sleep_ser.get_new_data()
 
-        if sleep_data_from_csv:
-            latest_datetime = sleep_data_from_csv[-1]["bedtime_start"]
-            new_sleep_data = ssc.filter_data_after_datetime(
-                data=new_sleep_data, datetime_str=latest_datetime)
+        contributors_ser = SleepContributorService()
+        contributors = contributors_ser.extract_from(new_sleep_data)
 
-        # TODO: remove
-        new_sleep_data = new_sleep_data[-10:]
-        info(f"new data num: {len(new_sleep_data)}")
+        heart_rate_ser = SleepHeartRateService()
+        heart_rate = heart_rate_ser.extract_from(new_sleep_data)
 
-        if not new_sleep_data:
-            info("there is no new data.")
-            return
+        hrv_ser = SleepHrvService()
+        hrv = hrv_ser.extract_from(new_sleep_data)
 
-        next_id = int(ssc.get_latest_id()) + 1
-        sleep_data = ssc.add_ids_to_data(
-            data=new_sleep_data, next_id=next_id)
+        readiness_ser = SleepReadinessService()
+        readiness = readiness_ser.extract_from(new_sleep_data)
 
-        extracted_contributors = ssc.extract_from_sleep_data(sleep_data=new_sleep_data, key="contributors")
-        c_next_id = int(ssc.get_latest_id("contributors")) + 1
-        contributors = ssc.put_id(extracted_contributors, c_next_id)
+        print(new_sleep_data[-1])
 
-        heart_rate_without_id = ssc.extract_from_sleep_data(new_sleep_data_with_id, "heart_rate")
-        hr_next_id = int(ssc.get_latest_id("heart_rate")) + 1
-        heart_rate = ssc.put_id(heart_rate_without_id, hr_next_id)
+        # for r in readiness:
+        #     readiness_contributors = r.pop("contributors")
+        #     r.update(readiness_contributors)
 
-        hrv_without_id = ssc.extract_from_sleep_data(new_sleep_data_with_id, "hrv")
-        h_next_id = int(ssc.get_latest_id("hrv")) + 1
-        hrv = ssc.put_id(hrv_without_id, h_next_id)
+        # # transform from list to dict to add data type
+        # sleep_dict = ss.transform_to_dict("sleep", new_sleep_data_with_id)
+        # contributors_dict = ss.transform_to_dict("contributors", contributors)
+        # heart_rate_dict = ss.transform_to_dict("heart_rate", heart_rate)
+        # hrv_dict = ss.transform_to_dict("hrv", hrv)
+        # readiness_dict = ss.transform_to_dict("readiness", readiness)
 
-        readiness_without_id = ssc.extract_from_sleep_data(new_sleep_data_with_id, "readiness")
-        r_next_id = int(ssc.get_latest_id("readiness")) + 1
-        readiness = ssc.put_id(readiness_without_id, r_next_id)
-
-        for r in readiness:
-            readiness_contributors = r.pop("contributors")
-            r.update(readiness_contributors)
-
-        # transform from list to dict to add data type
-        sleep_dict = ssc.transform_to_dict("sleep", new_sleep_data_with_id)
-        contributors_dict = ssc.transform_to_dict("contributors", contributors)
-        heart_rate_dict = ssc.transform_to_dict("heart_rate", heart_rate)
-        hrv_dict = ssc.transform_to_dict("hrv", hrv)
-        readiness_dict = ssc.transform_to_dict("readiness", readiness)
-
-        ssc.add(sleep_dict)
-        ssc.add(contributors_dict)
-        ssc.add(heart_rate_dict)
-        ssc.add(hrv_dict)
-        ssc.add(readiness_dict)
+        # ss.add(sleep_dict)
+        # ss.add(contributors_dict)
+        # ss.add(heart_rate_dict)
+        # ss.add(hrv_dict)
+        # ss.add(readiness_dict)
 
         return None
