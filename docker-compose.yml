@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: ./infra/docker/python/Dockerfile
-    container_name: 'python'
+    container_name: 'sleep-log'
     hostname: 'python'
     working_dir: '/opt/work/'
     tty: true
