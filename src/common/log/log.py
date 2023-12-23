@@ -23,7 +23,11 @@ from common.log.custom_formatter import CustomFormatter
 
 
 # Log format
-LOG_FORMAT = "%(asctime)s %(levelname)-7s [%(process)d] [%(thread)d] [%(filename)s:%(funcName)s:%(lineno)d] [%(name)s] %(message)s"
+# TODO: separate log format depending on pro or dev
+# TODO: make a directory named date like 20231223(yyyymmdd)
+# TODO: output log both, pro and dev
+# LOG_FORMAT = "%(asctime)s %(levelname)-7s [%(process)d] [%(thread)d] [%(filename)s:%(funcName)s:%(lineno)d] [%(name)s] %(message)s"
+LOG_FORMAT = "[%(asctime)s] %(levelname)-7s %(message)s"
 
 LOG_DATE_FORMAT = None
 

@@ -35,14 +35,14 @@ class CsvBaseRepository(CsvRepoInterface):
         Returns:
             list: _description_
         """
-        info("start to get all csv data.")
+        info("get all csv data. {0}", self.path)
         self.check_file(self.path)
 
         with open(self.path, "r", encoding="utf-8", newline="") as f:
             reader = csv.DictReader(f)
             data = [row for row in reader]
 
-        info(f"finish to get all data from csv. all csv data num: {len(data)}")
+        info("got all csv. data num: {0}", {len(data)})
         return data
 
     def find_by_id(self, id_: int):
