@@ -43,12 +43,6 @@ class SleepController(object):
         readiness_ser = SleepReadinessService()
         readiness = readiness_ser.extract_from(new_sleep_data)
 
-        print(new_sleep_data[-1])
-
-        # for r in readiness:
-        #     readiness_contributors = r.pop("contributors")
-        #     r.update(readiness_contributors)
-
         # # transform from list to dict to add data type
         # sleep_dict = ss.transform_to_dict("sleep", new_sleep_data_with_id)
         # contributors_dict = ss.transform_to_dict("contributors", contributors)

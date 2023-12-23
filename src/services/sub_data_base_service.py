@@ -41,7 +41,7 @@ class SubDataBaseService(BaseService):
         """
         info("extract data by key({0}), data num: {1}", self.key, len(from_data))
         data = []
-        data_id = int(self.__get_latest_id()) + 1
+        data_id = int(self._get_latest_id()) + 1
 
         for d in from_data:
             from_data_id = d["id"]
@@ -65,7 +65,7 @@ class SubDataBaseService(BaseService):
         info("extracted data by key({0}), extracted data num: {1}", self.key, len(data))
         return data
 
-    def __get_latest_id(self) -> int:
+    def _get_latest_id(self) -> int:
         """_summary_
 
         Args:
