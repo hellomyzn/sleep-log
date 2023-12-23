@@ -2,6 +2,7 @@
 #########################################################
 # Builtin packages
 #########################################################
+import copy
 import json
 
 #########################################################
@@ -43,21 +44,18 @@ class SleepService(object):
             json_data = json.load(f)
             sleep_data = json_data["sleep"]
 
-        # remove unnecessary data
-        # sleep_data = sleep_data[-10::]
         info("finish to get sleep log. data len: {0}", len(sleep_data))
         return sleep_data
 
-    def all(self, data_type: str) -> list:
+    def all(self) -> list:
         """_summary_
 
         Returns:
             list: _description_
         """
-        data = self.repo.all(data_type)
-        return data
+        return self.repo.all()
 
-    def filter_data_by_datetime(self, data: list, datetime_str: str) -> list:
+    def filter_data_after_datetime(self, data: list, datetime_str: str) -> list:
         """_summary_
 
         Args:
@@ -80,7 +78,7 @@ class SleepService(object):
         info("finish to filter data by date. new data num: {0}", len(new_data))
         return new_data
 
-    def put_id(self, data: list, next_id: int) -> list:
+    def add_ids_to_data(self, data: list, next_id: int) -> list:
         """_summary_
 
         Args:
@@ -91,12 +89,11 @@ class SleepService(object):
             list: _description_
         """
         info("start to put id to each elements. data num: {0}, next id: {1}", len(data), next_id)
-        data_with_id = []
-        for i, d in enumerate(data):
-            # 参照渡しの影響を考慮しd.copy()
-            # -> append(d)にすると参照元のdataにidが追加されてしまう
-            data_with_id.append(d.copy())
-            data_with_id[i]["id"] = next_id
+        # deepcopy
+        data_with_id = copy.deepcopy(data)
+
+        for d in data_with_id:
+            d["id"] = next_id
             next_id += 1
 
         info("finish to put id to each elements. next id: {0}", next_id)
@@ -162,7 +159,7 @@ class SleepService(object):
              data_dict["data_type"], len(data_dict["data"]))
         return data_dict
 
-    def get_latest_id(self, data_type: str) -> int:
+    def get_latest_id(self) -> int:
         """_summary_
 
         Args:
@@ -171,7 +168,7 @@ class SleepService(object):
         Returns:
             int: _description_
         """
-        all_data = self.repo.all(data_type)
+        all_data = self.repo.all()
         if not all_data:
             return 0
 
