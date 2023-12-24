@@ -20,7 +20,7 @@ from common.log import (
 )
 
 
-class SleepService(BaseService):
+class DailySleepService(BaseService):
     """sleep service"""
 
     def __init__(self, repo: RepoInterface):
@@ -32,21 +32,28 @@ class SleepService(BaseService):
         Returns:
             list: _description_
         """
-        new_sleep_data = self.get()
-
-        sleep_data_from_repo = self.all()
+        new_daily_sleep_data = self.get()
+        daily_sleep_data_from_repo = self.all()
         latest_id = 0
-        if sleep_data_from_repo:
-            latest_datetime = sleep_data_from_repo[-1]["bedtime_start"]
-            latest_id = int(sleep_data_from_repo[-1]["id"])
-            new_sleep_data = self.__filter_data_after_datetime(data=new_sleep_data, datetime_str=latest_datetime)
+        if daily_sleep_data_from_repo:
+            latest_date = daily_sleep_data_from_repo[-1]["day"]
+            latest_id = int(daily_sleep_data_from_repo[-1]["id"])
+            new_daily_sleep_data = self.__filter_data_after_datetime(
+                data=new_daily_sleep_data, datetime_str=latest_date)
 
-        if not new_sleep_data:
-            info("there is no new data.")
+        if not new_daily_sleep_data:
+            info("there is no new daily sleep data.")
             return []
 
+        # pop contributors and add again
+        key_contributors = "contributors"
+        for d in new_daily_sleep_data:
+            if key_contributors in d:
+                contributors = d.pop(key_contributors)
+                d.update(contributors)
+
         next_sleep_id = latest_id + 1
-        sleep_data_with_id = self._add_ids(new_sleep_data, next_sleep_id)
+        sleep_data_with_id = self._add_ids(new_daily_sleep_data, next_sleep_id)
 
         info("new sleep data num: {0}", len(sleep_data_with_id))
         return sleep_data_with_id
@@ -58,12 +65,12 @@ class SleepService(BaseService):
             dict: _description_
         """
         # get data
-        path = self.config["OURA"]["SLEEP"]
+        path = self.config["OURA"]["DAILY_SLEEP"]
         info("get sleep log. {0}", path)
 
         with open(path, mode="r", encoding="utf-8") as f:
             json_data = json.load(f)
-            sleep_data = json_data["sleep"]
+            sleep_data = json_data["daily_sleep"]
 
         info("got sleep log. data len: {0}", len(sleep_data))
         return sleep_data
@@ -84,7 +91,7 @@ class SleepService(BaseService):
         # remove date before the date
         new_data = []
         for d in data:
-            datetime = fromisoformat_to_datetime(d["bedtime_start"])
+            datetime = fromisoformat_to_datetime(d["day"])
             if latest_datetime < datetime:
                 new_data.append(d)
 

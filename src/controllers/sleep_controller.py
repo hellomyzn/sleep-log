@@ -39,34 +39,36 @@ class SleepController(object):
         """
 
         sleep_ser = SleepService(CsvSleepRepository)
-        new_sleep_data = sleep_ser.get_new_data()
-
         contributors_ser = SleepContributorService(CsvSleepContributorRepository)
-        contributors = contributors_ser.extract_from(new_sleep_data)
-        contributors_ser.add(contributors)
-        contributors_ser.repo = GssSleepContributorRepository()
-        contributors_ser.add(contributors)
-
         heart_rate_ser = SleepHeartRateService(CsvSleepHeartRateRepository)
-        heart_rate = heart_rate_ser.extract_from(new_sleep_data)
-        heart_rate_ser.add(heart_rate)
-        heart_rate_ser.repo = GssSleepHeartRateRepository()
-        heart_rate_ser.add(heart_rate)
-
         hrv_ser = SleepHrvService(CsvSleepHrvRepository)
-        hrv = hrv_ser.extract_from(new_sleep_data)
-        hrv_ser.add(hrv)
-        hrv_ser.repo = GssSleepHrvRepository()
-        hrv_ser.add(hrv)
-
         readiness_ser = SleepReadinessService(CsvSleepReadinessRepository)
+
+        new_sleep_data = sleep_ser.get_new_data()
+        if not new_sleep_data:
+            return
+
+        contributors = contributors_ser.extract_from(new_sleep_data)
+        heart_rate = heart_rate_ser.extract_from(new_sleep_data)
+        hrv = hrv_ser.extract_from(new_sleep_data)
         readiness = readiness_ser.extract_from(new_sleep_data)
-        readiness_ser.add(readiness)
-        readiness_ser = GssSleepReadinessRepository()
-        readiness_ser.add(readiness)
 
         sleep_ser.add(new_sleep_data)
+        heart_rate_ser.add(heart_rate)
+        contributors_ser.add(contributors)
+        hrv_ser.add(hrv)
+        readiness_ser.add(readiness)
+
         sleep_ser.repo = GssSleepRepository()
+        contributors_ser.repo = GssSleepContributorRepository()
+        heart_rate_ser.repo = GssSleepHeartRateRepository()
+        hrv_ser.repo = GssSleepHrvRepository()
+        readiness_ser = GssSleepReadinessRepository()
+
         sleep_ser.add(new_sleep_data)
+        contributors_ser.add(contributors)
+        heart_rate_ser.add(heart_rate)
+        hrv_ser.add(hrv)
+        readiness_ser.add(readiness)
 
         return None

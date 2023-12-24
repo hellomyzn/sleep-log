@@ -14,14 +14,17 @@
 #########################################################
 from common.log import initialize_logger
 from controllers import SleepController
+from controllers import DailySleepController
 
 
 def main():
     """main"""
     initialize_logger()
     sc = SleepController()
+    dsc = DailySleepController()
 
-    sc.add()
+    # sc.add()
+    dsc.add()
 
 
 if __name__ == "__main__":
