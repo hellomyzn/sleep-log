@@ -58,7 +58,7 @@ class SleepService(BaseService):
             dict: _description_
         """
         # get data
-        path = self.config["OURA"]["SLEEP"]
+        path = resolve_file_path(self.config["OURA"]["SLEEP"])
         info("get sleep log. {0}", path)
 
         with open(path, mode="r", encoding="utf-8") as f:

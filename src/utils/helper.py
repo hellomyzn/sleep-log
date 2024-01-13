@@ -2,6 +2,7 @@
 #########################################################
 # Builtin packages
 #########################################################
+import glob
 import json
 from datetime import datetime
 
@@ -40,3 +41,16 @@ def json_load(path: str) -> list:
     with open(path, mode="r", encoding="utf-8") as f:
         json_load_ = json.load(f)
     return json_load_
+
+
+def resolve_file_path(path: str) -> str:
+    """_summary_
+
+    Args:
+        path (str): _description_
+
+    Returns:
+        str: _description_
+    """
+    p = glob.glob(f"{path}*")
+    return p[0]
