@@ -50,7 +50,7 @@ class SubDataBaseService(BaseService):
                 data.append(popped_data)
 
                 # replace from value to id
-                new_key = f"sleep_{self.key}_id"
+                new_key = f"sleep_{self.key}id_"
                 d[new_key] = data_id
 
                 debug("update data. data id: {0}, data[{1}]: {2}",
