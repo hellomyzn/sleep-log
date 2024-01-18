@@ -26,14 +26,6 @@ class BaseService(object):
         self.config = Config().config
         self.repo = repo()
 
-    def all(self) -> list:
-        """_summary_
-
-        Returns:
-            list: _description_
-        """
-        return self.repo.all()
-
     def add(self, data: list) -> None:
         """_summary_
 

@@ -12,9 +12,9 @@
 #########################################################
 # Own packages
 #########################################################
-from services.sleeps import SleepService
-from repositories.sleep.sleeps import CsvSleepRepository
-from repositories.sleep.sleeps import GssSleepRepository
+from services import SleepService
+from repositories.sleeps import CsvSleepRepository
+from repositories.sleeps import GssSleepRepository
 
 
 class SleepController(object):

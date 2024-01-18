@@ -17,7 +17,9 @@ import pathlib
 #########################################################
 from repositories.interfaces import RepoInterface
 from common.log import (
+    debug,
     info,
+    error,
     warn
 )
 
@@ -28,38 +30,41 @@ class CsvBaseRepository(RepoInterface):
     path: str = None
     keys: list = field(init=False, default_factory=list)
 
-    def all(self) -> list:
+    def all(self, path: str) -> list:
         """_summary_
+
+        Args:
+            path (str): _description_
 
         Returns:
             list: _description_
         """
-        info("get all csv data. {0}", self.path)
-        self.check_file(self.path)
+        debug("get all csv data. path: {0}", path)
 
-        with open(self.path, "r", encoding="utf-8", newline="") as f:
+        with open(path, "r", encoding="utf-8", newline="") as f:
             reader = csv.DictReader(f)
             data = [row for row in reader]
+        debug("get all csv data. data num: {0}", len(data))
 
-        info("got all csv. data num: {0}", len(data))
         return data
 
     def find_by_id(self, id_: int):
         pass
 
-    def add(self, data: dict) -> None:
+    def add(self, data: list, columns: list, path: str) -> None:
         """_summary_
 
         Args:
-            data (dict): _description_
+            data (list): _description_
+            columns (list): _description_
+            path (str): _description_
         """
-        info("add sleep log into csv. data num: {0}", len(data))
+        info("add sleep data into csv. data num: {0}, path: {1}, columns: {2}",
+             len(data), path, columns)
 
-        self.check_file(self.path)
-
-        with open(self.path, 'a', encoding="utf-8", newline="") as f:
+        with open(path, 'a', encoding="utf-8", newline="") as f:
             for d in data:
-                writer = csv.DictWriter(f, fieldnames=self.keys)
+                writer = csv.DictWriter(f, fieldnames=columns)
                 writer.writerow(d)
 
     def update(self, data: dict):
@@ -72,7 +77,7 @@ class CsvBaseRepository(RepoInterface):
         pass
 
     # TODO: move into helper
-    def check_file(self, path: str) -> None:
+    def check_file(self, path: str, columns: list) -> None:
         """_summary_
 
         Args:
@@ -82,8 +87,8 @@ class CsvBaseRepository(RepoInterface):
             pathlib.Path(path).touch()
             warn(f"create a csv file since there was not the file. path: {path}")
 
-        if not self.has_header(path):
-            self.write_header(path)
+        if not self.has_header(path, columns):
+            self.write_header(path, columns)
 
     def file_exists(self, path: str) -> bool:
         """_summary_
@@ -96,11 +101,12 @@ class CsvBaseRepository(RepoInterface):
         """
         return os.path.isfile(path)
 
-    def has_header(self, path: str) -> bool:
+    def has_header(self, path: str, columns: list) -> bool:
         """_summary_
 
         Args:
             path (str): _description_
+            columns (list): _description_
 
         Raises:
             Exception: _description_
@@ -116,24 +122,22 @@ class CsvBaseRepository(RepoInterface):
                 warn(f"header does not exist. path: {path}")
                 return False
 
-            # if not header == self.COLUMNS:
-            #     error(f"the csv's header is unexpected. columns: {header}, path: {path}")
-            #     raise Exception("can not continue since the header is not expected")
+            if not header == columns:
+                error(f"the csv's header is unexpected. columns: {header}, path: {path}")
+                raise Exception("can not continue since the header is not expected")
 
             return True
 
-    def write_header(self, path: str) -> None:
+    def write_header(self, path: str, columns: list) -> None:
         """_summary_
 
         Args:
             path (str): _description_
         """
-        warn(f"write header. path: {path}")
+        warn("write header. path: {0}, columns: {1}", path, columns)
         with open(path, "a", encoding="utf-8", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=self.keys)
+            writer = csv.DictWriter(f, fieldnames=columns)
             writer.writeheader()
-
-        warn("successfully write header.")
 
     def tail(self, num: int) -> list:
         """_summary_

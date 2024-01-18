@@ -36,7 +36,7 @@ class SleepService(BaseService):
         new_sleep_data = self.__get()
 
         # get sleep data from repo
-        all_sleep_data_from_repo = self.all()
+        all_sleep_data_from_repo = self.repo.all_sleep_data()
         all_sleep = all_sleep_data_from_repo[self.repo.key_sleep]
         all_contributors = all_sleep_data_from_repo[self.repo.key_contributors]
         all_heart_rates = all_sleep_data_from_repo[self.repo.key_heart_rate]

@@ -15,6 +15,7 @@
 from common.log import initialize_logger
 from controllers import SleepController
 from controllers import DailySleepController
+from controllers import DailyActivityController
 
 
 def main():
@@ -22,9 +23,11 @@ def main():
     initialize_logger()
     sc = SleepController()
     dsc = DailySleepController()
+    dac = DailyActivityController()
 
-    # sc.add()
-    dsc.add()
+    sc.add()
+    # dsc.add()
+    # dac.add()
 
 
 if __name__ == "__main__":
